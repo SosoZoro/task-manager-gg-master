@@ -1,0 +1,48 @@
+<ion-content class="ion-padding">
+  <h2>User Tasks</h2>
+  
+  <ion-item>
+    <ion-label>Select User</ion-label>
+    <ion-select [(ngModel)]="selectedUser" (ionChange)="onUserSelect($event)">
+      <ion-select-option *ngFor="let user of users" [value]="user.userUid">
+        {{user.name}} ({{user.email}})
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-list *ngIf="createdTasks.length > 0">
+    <ion-list-header>
+      <ion-label>Tasks created by selected user:</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let task of createdTasks">
+      <ion-label>
+        <h2>{{task.description}}</h2>
+        <p>Status: {{task.done ? 'Completed' : 'Pending'}}</p>
+      </ion-label>
+      <ion-buttons slot="end" *ngIf="task.createdByUid === currentUserId">
+        <ion-button (click)="editTask(task)">Edit</ion-button>
+        <ion-button (click)="deleteTask(task)" color="danger">Delete</ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="assignedTasks.length > 0">
+    <ion-list-header>
+      <ion-label>Tasks assigned to selected user:</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let task of assignedTasks">
+      <ion-label>
+        <h2>{{task.description}}</h2>
+        <p>Status: {{task.done ? 'Completed' : 'Pending'}}</p>
+      </ion-label>
+      <ion-buttons slot="end" *ngIf="task.assignedToUid === currentUserId">
+        <ion-button (click)="editTask(task)">Edit</ion-button>
+        <ion-button (click)="deleteTask(task)" color="danger">Delete</ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+  <ion-text *ngIf="selectedUser && createdTasks.length === 0 && assignedTasks.length === 0">
+    <p>No tasks found for this user.</p>
+  </ion-text>
+</ion-content>
